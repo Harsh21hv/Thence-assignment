@@ -3,11 +3,21 @@ import { useNavigate } from 'react-router-dom';
 import { useRef, useState } from 'react';
 
 const Registration = () => {
-  const email = useRef(null);
-  const name = useRef(null);
+  const [email1, setEmail] = useState('');
+  const [name1, setName] = useState('');
+
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
+  };
+
+  const handleNameChange = (event) => {
+    setName(event.target.value);
+  };
+
+  const isButtonDisabled = email1 === '' || name1 === '';
   const navigate = useNavigate();
   const handleSubmit = () => {
-    const isValid = validateEmail(email.current.value);
+    const isValid = validateEmail(email1);
     if (!isValid) {
       setErrorMessage('Please enter a valid email address.');
     } else {
@@ -54,24 +64,29 @@ const Registration = () => {
           <input
             required
             type='text'
-            ref={name}
+            value={name1}
             placeholder='Enter your name'
             className='p-3 bg-gray-200 rounded-3xl w-[300px] '
+            onChange={handleNameChange}
           />
           <div>
             <input
               type='email'
               placeholder='Enter your email'
-              ref={email}
+              value={email1}
               className='p-3 bg-gray-200 rounded-3xl w-[300px] '
+              onChange={handleEmailChange}
             />
             {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
           </div>
 
           <button
             type='submit'
-            className='p-3 bg-gray-400 rounded-3xl w-[300px] text-white hover:bg-black'
+            className={`p-3 bg-gray-400 rounded-3xl w-[300px] text-white ${
+              isButtonDisabled ? '' : ' hover:bg-black'
+            }`}
             onClick={handleSubmit}
+            disabled={isButtonDisabled}
           >
             Submit
           </button>
